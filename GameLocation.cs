@@ -1978,47 +1978,78 @@ label_112:;
 
     public void spawnWeeds(bool weedsOnly)
     {
+      // Num1 set to random value between 5 to 12 for Farm, 2 to 6 for non Farm
       int num1 = Game1.random.Next(this.isFarm ? 5 : 2, this.isFarm ? 12 : 6);
+      // First day of spring, multiply the random number by 15
       if (Game1.dayOfMonth == 1 && Game1.currentSeason.Equals("spring"))
         num1 *= 15;
+      // If dessert, 10% chance to either have a value of 1, otherwise, it's 0. 
       if (this.name.Equals("Desert"))
         num1 = Game1.random.NextDouble() < 0.1 ? 1 : 0;
+      // Iterate from 0 to num1
       for (int index = 0; index < num1; ++index)
       {
         int num2 = 0;
+        // Each iteration always try do 3 times of what is in this loop
         while (num2 < 3)
         {
+          // Pick random x and y tile
           int xTile = Game1.random.Next(this.map.DisplayWidth / Game1.tileSize);
           int yTile = Game1.random.Next(this.map.DisplayHeight / Game1.tileSize);
+          // Create a vector from x and y random
           Vector2 vector2 = new Vector2((float) xTile, (float) yTile);
           Object @object;
+          // See if there is an object already on that specific tile
           this.objects.TryGetValue(vector2, out @object);
+          // Set which and num 3 to -1
           int which = -1;
           int num3 = -1;
+
+          // If it's dessert
           if (this.name.Equals("Desert"))
           {
+            // Unclear what this is
             if (Game1.random.NextDouble() >= 0.5)
               ;
           }
+          // 15% chance of either 1 or 0 plus if it's weed only add another 0.05 chance
+          // which variable must be 1 or no weed will be spawn. Please note for 'weeds only', it's
+          // always true (0.05 is non zero, thus true)
           else if (Game1.random.NextDouble() < 0.15 + (weedsOnly ? 0.05 : 0.0))
-            which = 1;
+            which = 1; // set which to 1
+          // If not weedsOnly and a random change of 35% chance
           else if (!weedsOnly && Game1.random.NextDouble() < 0.35)
-            num3 = 1;
+            // num3 is 1
+            num3 = 1; 
+          // If not weeds and not farm, and a random of 35% chance
           else if (!weedsOnly && !this.isFarm && Game1.random.NextDouble() < 0.35)
+            // num3 is 2
             num3 = 2;
+          // If it hits the two conditions above
           if (num3 != -1)
           {
+            // If this is farm, then there is a 25% chance to just return execution and don't do anything
             if (this is Farm && Game1.random.NextDouble() < 0.25)
               return;
           }
-          else if (@object == null && this.doesTileHaveProperty(xTile, yTile, "Diggable", "Back") != null && (this.isTileLocationOpen(new Location(xTile * Game1.tileSize, yTile * Game1.tileSize)) && !this.isTileOccupied(vector2, "")) && this.doesTileHaveProperty(xTile, yTile, "Water", "Back") == null)
+          // Arriving here means we'll start generating weeds
+          // If not object at location, and the tile is Diggable, and tile is open,
+          // and not occupied, and not watered 
+          else if (@object == null && this.doesTileHaveProperty(xTile, yTile, "Diggable", "Back") != null 
+            && (this.isTileLocationOpen(new Location(xTile * Game1.tileSize, yTile * Game1.tileSize)) 
+              && !this.isTileOccupied(vector2, "")) 
+            && this.doesTileHaveProperty(xTile, yTile, "Water", "Back") == null)
           {
             string str = this.doesTileHaveProperty(xTile, yTile, "NoSpawn", "Back");
+            // If tile is not marked NoSpawn OR not a grass or not "All"
             if (str == null || !str.Equals("Grass") && !str.Equals("All") && !str.Equals("True"))
             {
+              // IF which is not -1, and not winter, and this is on farm
               if (which != -1 && !Game1.currentSeason.Equals("winter") && this.name.Equals("Farm"))
               {
+                // Create randomly 1 to 3 weeds 
                 int numberOfWeeds = Game1.random.Next(1, 3);
+                // On that tile grow Grass following number of weeds
                 this.terrainFeatures.Add(vector2, (TerrainFeature) new Grass(which, numberOfWeeds));
               }
             }
