@@ -8410,15 +8410,25 @@ label_19:
 
     public void spawnWeedsAndStones(int numDebris = -1, bool weedsOnly = false, bool spawnFromOldWeeds = true)
     {
+      // No spawn if gold clock is installed, at beach, winter, or at dessert
       if (this is Farm && (this as Farm).isBuildingConstructed("Gold Clock") || (this is Beach || Game1.currentSeason.Equals("winter")) || this is Desert)
         return;
+
+      // If numDebris is not -1, set it, if it is -1
+        //, 95% change to:
+        //  try 25% chance to get number between 10 - 25, if not 5 - 11 
+        // or 0 (no new debris)
       int num = numDebris != -1 ? numDebris : (Game1.random.NextDouble() < 0.95 ? (Game1.random.NextDouble() < 0.25 ? Game1.random.Next(10, 21) : Game1.random.Next(5, 11)) : 0);
+      // Raining double the weed to be placed
       if (Game1.isRaining)
         num *= 2;
+      // First of the month multiply number of weeds to be placed by 5 times.
       if (Game1.dayOfMonth == 1)
         num *= 5;
+      // If there are no old weeds, we're expected to spawn from old weeds 
       if (this.objects.Count <= 0 & spawnFromOldWeeds)
         return;
+      // Outside of the farm, half weeds placed
       if (!(this is Farm))
         num /= 2;
       for (int index = 0; index < num; ++index)
