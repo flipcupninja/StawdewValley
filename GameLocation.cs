@@ -1,4 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
+// Decompiled with JetBrains decompiler
 // Type: StardewValley.GameLocation
 // Assembly: Stardew Valley, Version=1.2.6400.27469, Culture=neutral, PublicKeyToken=null
 // MVID: 77B7094A-F6F0-4ACC-91F4-E335E2733EDB
@@ -8431,68 +8431,129 @@ label_19:
       // Outside of the farm, half weeds placed
       if (!(this is Farm))
         num /= 2;
+
+      // For each number debris to be created
       for (int index = 0; index < num; ++index)
       {
+        // Vector definition https:\/\/docs.microsoft.com/en-us/dotnet/api/system.numerics.vector2?view=netframework-4.8
+        // If spanFromOldWeeds is true, create new vector with random location equal or between -1 and 2 on both X and Y value
+        // Translation for this one, seems to be the position relative to the old weed as reference to spawn.
+        // otherwise randomize the location from 0 to max width for X, or 0 to max height for Y
+        // This vector represent the random location to spawn the object. 
         Vector2 vector2_1 = spawnFromOldWeeds ? new Vector2((float) Game1.random.Next(-1, 2), (float) Game1.random.Next(-1, 2)) : new Vector2((float) Game1.random.Next(this.map.Layers[0].LayerWidth), (float) Game1.random.Next(this.map.Layers[0].LayerHeight));
+        // If the random value for old weeds result to 0, try again 1 more time
         while (spawnFromOldWeeds && vector2_1.Equals(Vector2.Zero))
           vector2_1 = new Vector2((float) Game1.random.Next(-1, 2), (float) Game1.random.Next(-1, 2));
+        // Key value pair initialized with zero vector and null value
         KeyValuePair<Vector2, Object> keyValuePair = new KeyValuePair<Vector2, Object>(Vector2.Zero, (Object) null);
+        // If it spanFromOldWeeds is true, keyvalue pair is a random number between 1 to max number of object 
         if (spawnFromOldWeeds)
           keyValuePair = this.objects.ElementAt<KeyValuePair<Vector2, Object>>(Game1.random.Next(this.objects.Count));
+        // If spawnFromOldWeeds is true, set vector2_2 is set set keyvaluePair value, if not, set this to 0
         Vector2 vector2_2 = spawnFromOldWeeds ? keyValuePair.Key : Vector2.Zero;
         bool flag1 = this is Farm;
-        if ((flag1 && this.doesTileHaveProperty((int) ((double) vector2_1.X + (double) vector2_2.X), (int) ((double) vector2_1.Y + (double) vector2_2.Y), "Diggable", "Back") != null || !flag1 && this.doesTileHaveProperty((int) ((double) vector2_1.X + (double) vector2_2.X), (int) ((double) vector2_1.Y + (double) vector2_2.Y), "Diggable", "Back") == null) && (this.doesTileHaveProperty((int) ((double) vector2_1.X + (double) vector2_2.X), (int) ((double) vector2_1.Y + (double) vector2_2.Y), "Type", "Back") == null || !this.doesTileHaveProperty((int) ((double) vector2_1.X + (double) vector2_2.X), (int) ((double) vector2_1.Y + (double) vector2_2.Y), "Type", "Back").Equals("Wood")) && (this.isTileLocationTotallyClearAndPlaceable(vector2_1 + vector2_2) || spawnFromOldWeeds && (this.objects.ContainsKey(vector2_1 + vector2_2) && this.objects[vector2_1 + vector2_2].parentSheetIndex != 105 || this.terrainFeatures.ContainsKey(vector2_1 + vector2_2) && (this.terrainFeatures[vector2_1 + vector2_2] is HoeDirt || this.terrainFeatures[vector2_1 + vector2_2] is Flooring))) && (this.doesTileHaveProperty((int) ((double) vector2_1.X + (double) vector2_2.X), (int) ((double) vector2_1.Y + (double) vector2_2.Y), "NoSpawn", "Back") == null && (spawnFromOldWeeds || !this.objects.ContainsKey(vector2_1 + vector2_2))))
+
+        // If on the farm, and check if the tile on X using vector 2_1.X + vector 2_2.X and Y of 2_1 and 2_2 combined is
+        // has a layer called Back and property of Diggable 
+        if ((flag1 && this.doesTileHaveProperty((int) ((double) vector2_1.X + (double) vector2_2.X), 
+          (int) ((double) vector2_1.Y + (double) vector2_2.Y), "Diggable", "Back") != null 
+        // Or If not at farm and the tile shouldn't have diggable property and back layer
+        || !flag1 && this.doesTileHaveProperty((int) ((double) vector2_1.X + (double) vector2_2.X), 
+          (int) ((double) vector2_1.Y + (double) vector2_2.Y), "Diggable", "Back") == null) 
+        // Skip the rest of the checks as this is too detailed and no longer helpful
+        && (this.doesTileHaveProperty((int) ((double) vector2_1.X + (double) vector2_2.X), 
+          (int) ((double) vector2_1.Y + (double) vector2_2.Y), "Type", "Back") == null 
+        || !this.doesTileHaveProperty((int) ((double) vector2_1.X + (double) vector2_2.X), 
+          (int) ((double) vector2_1.Y + (double) vector2_2.Y), "Type", "Back").Equals("Wood")) 
+        && (this.isTileLocationTotallyClearAndPlaceable(vector2_1 + vector2_2) 
+          || spawnFromOldWeeds && (this.objects.ContainsKey(vector2_1 + vector2_2) 
+            && this.objects[vector2_1 + vector2_2].parentSheetIndex != 105 
+            || this.terrainFeatures.ContainsKey(vector2_1 + vector2_2) 
+            && (this.terrainFeatures[vector2_1 + vector2_2] is HoeDirt 
+              || this.terrainFeatures[vector2_1 + vector2_2] is Flooring))) 
+        && (this.doesTileHaveProperty((int) ((double) vector2_1.X + (double) vector2_2.X), 
+          (int) ((double) vector2_1.Y + (double) vector2_2.Y), "NoSpawn", "Back") == null
+           && (spawnFromOldWeeds || !this.objects.ContainsKey(vector2_1 + vector2_2))))
         {
+          // Set -1 as parentSheetIndex
           int parentSheetIndex = -1;
+          // Use different parentSheet for Dessert
           if (this is Desert)
           {
             parentSheetIndex = 750;
           }
           else
           {
-            if (Game1.random.NextDouble() < 0.5 && !weedsOnly && (!spawnFromOldWeeds || keyValuePair.Value.Name.Equals("Stone") || keyValuePair.Value.Name.Contains("Twig")))
+            // If it succeeed the 50% chance, and not weeds only, and not spawnFromOldWeeds or it's a stone or a twig
+            if (Game1.random.NextDouble() < 0.5 
+              && !weedsOnly && (!spawnFromOldWeeds || keyValuePair.Value.Name.Equals("Stone") 
+                || keyValuePair.Value.Name.Contains("Twig")))
+              // Set parentsheets index with 50% chance to set either 343 or 450 (another 50% chance) or 294 or 295
               parentSheetIndex = Game1.random.NextDouble() >= 0.5 ? (Game1.random.NextDouble() < 0.5 ? 343 : 450) : (Game1.random.NextDouble() < 0.5 ? 294 : 295);
+            // if it's the other 50% chance, and not spawn from old weed or keyvalue pair contans Weed 
             else if (!spawnFromOldWeeds || keyValuePair.Value.Name.Contains("Weed"))
+              // Get the weed for the season for the parentSheetIndex
               parentSheetIndex = GameLocation.getWeedForSeason(Game1.random, Game1.currentSeason);
+            // If this is farm and not spawnFromOldWeeds and a 5% chance succeed
             if (this is Farm && !spawnFromOldWeeds && Game1.random.NextDouble() < 0.05)
             {
+              // Add terrainFeatures at vector 2_1 + vector 2_2, put a tree with random choice of which tree, and random choice of the growth stage
               this.terrainFeatures.Add(vector2_1 + vector2_2, (TerrainFeature) new Tree(Game1.random.Next(3) + 1, Game1.random.Next(3)));
+              // Go to next loop
               continue;
             }
           }
+          // If the parentSheet is found
           if (parentSheetIndex != -1)
           {
             bool flag2 = false;
+            // Check if there is already an object at the vector locations
             if (this.objects.ContainsKey(vector2_1 + vector2_2))
             {
+              // If not, set the object with the added vector as keys
               Object @object = this.objects[vector2_1 + vector2_2];
+              // If it's not a fence or chest
               if (!(@object is Fence) && !(@object is Chest))
               {
-                if (@object.name != null && !@object.Name.Contains("Weed") && (!@object.Name.Equals("Stone") && !@object.name.Contains("Twig")) && @object.name.Length > 0)
+                // If it's not weed, stone, twig, and object name length is more than 0
+                if (@object.name != null 
+                  && !@object.Name.Contains("Weed") && (!@object.Name.Equals("Stone") 
+                    && !@object.name.Contains("Twig")) && @object.name.Length > 0)
                 {
+                  // Set flag2 to be true
                   flag2 = true;
+                  // Say it's destroyed
                   Game1.debugOutput = @object.Name + " was destroyed";
                 }
+                // Remove said objects
                 this.objects.Remove(vector2_1 + vector2_2);
               }
               else
+                // If it doesn't already contain an object, go to next loop
                 continue;
             }
+            // Check if terrain features already have an object
             else if (this.terrainFeatures.ContainsKey(vector2_1 + vector2_2))
             {
               try
               {
+                // Check if it's hoe dirt or flooring
                 flag2 = this.terrainFeatures[vector2_1 + vector2_2] is HoeDirt || this.terrainFeatures[vector2_1 + vector2_2] is Flooring;
               }
               catch (Exception ex)
               {
               }
               if (!flag2)
+                // Break the loop (ignoring all future debris)
                 break;
+              // Remove them if it's hoe dirt or flooring
               this.terrainFeatures.Remove(vector2_1 + vector2_2);
             }
+            // If you're on the farm and flag2 is up
             if (flag2 && this is Farm)
+              // Inform that weed has been destroying some parts of your farm
               Game1.showGlobalMessage(Game1.content.LoadString("Strings\\Locations:Farm_WeedsDestruction"));
+              // Add new object at the location and existing parent sheet index (weed takeover)
             this.objects.Add(vector2_1 + vector2_2, new Object(vector2_1 + vector2_2, parentSheetIndex, 1));
           }
         }
