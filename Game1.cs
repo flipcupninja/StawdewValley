@@ -7190,7 +7190,9 @@ label_81:
                     {
                       if (!(s == "growgrass"))
                         return;
+                      // Spawn weed at current location
                       Game1.currentLocation.spawnWeeds(false);
+                      // Grow Weed Grass at current locations
                       Game1.currentLocation.growWeedGrass(Convert.ToInt32(strArray[1]));
                       return;
                     }

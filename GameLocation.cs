@@ -1947,27 +1947,43 @@ label_112:;
       return count;
     }
 
+    // SOMA: Grow weed grass is the grass spread logic
     public void growWeedGrass(int iterations)
     {
+      // Repeat as many as how many iteration you want to grow the grass
       for (int index1 = 0; index1 < iterations; ++index1)
       {
+        // Each interation goes as many as terrain features on map
         for (int index2 = this.terrainFeatures.Count - 1; index2 >= 0; --index2)
         {
+          // Set keyValuePair to the currently index2 terrainFeatures
           KeyValuePair<Vector2, TerrainFeature> keyValuePair = this.terrainFeatures.ElementAt<KeyValuePair<Vector2, TerrainFeature>>(index2);
+          // IF the type if Grass, and at a chance of 65%
           if (keyValuePair.Value.GetType() == typeof (Grass) && Game1.random.NextDouble() < 0.65)
           {
+            // Number of weeds is < 4 (this is the 4 tuft)
             if (((Grass) keyValuePair.Value).numberOfWeeds < 4)
+              // Set number of weed to be the smaller value between 4 or number of weeds + random 0 - 3. This is because one grass is at 
               ((Grass) keyValuePair.Value).numberOfWeeds = (int) (byte) Math.Min(4, ((Grass) keyValuePair.Value).numberOfWeeds + (int) (byte) Game1.random.Next(3));
+            // If number of weeds is more or equal to 4
             else if (((Grass) keyValuePair.Value).numberOfWeeds >= 4)
             {
               int x = (int) keyValuePair.Key.X;
               int y = (int) keyValuePair.Key.Y;
-              if (this.isTileOnMap(x, y) && !this.isTileOccupied(keyValuePair.Key + new Vector2(-1f, 0.0f), "") && (this.isTileLocationOpenIgnoreFrontLayers(new Location((x - 1) * Game1.tileSize, y * Game1.tileSize)) && this.doesTileHaveProperty(x - 1, y, "Diggable", "Back") != null) && Game1.random.NextDouble() < 0.25)
+              // Check tile to the left of the current grass see if it's open, check if it's diggable on the back layer 
+              // and run a randomness with chance of 25%
+              if (this.isTileOnMap(x, y) && !this.isTileOccupied(keyValuePair.Key + new Vector2(-1f, 0.0f), "") 
+                && (this.isTileLocationOpenIgnoreFrontLayers(new Location((x - 1) * Game1.tileSize, y * Game1.tileSize)) 
+                && this.doesTileHaveProperty(x - 1, y, "Diggable", "Back") != null) && Game1.random.NextDouble() < 0.25)
+                // If it succeed, add new grass on the tile west of existing grass with random growth stage between 1 - 3 inclusive
                 this.terrainFeatures.Add(keyValuePair.Key + new Vector2(-1f, 0.0f), (TerrainFeature) new Grass((int) ((Grass) keyValuePair.Value).grassType, Game1.random.Next(1, 3)));
+              // Do the same checks for the east tile of existing grass (25% chance also), also grow random stage 1-3 if succeeded
               if (this.isTileOnMap(x, y) && !this.isTileOccupied(keyValuePair.Key + new Vector2(1f, 0.0f), "") && (this.isTileLocationOpenIgnoreFrontLayers(new Location((x + 1) * Game1.tileSize, y * Game1.tileSize)) && this.doesTileHaveProperty(x + 1, y, "Diggable", "Back") != null) && Game1.random.NextDouble() < 0.25)
                 this.terrainFeatures.Add(keyValuePair.Key + new Vector2(1f, 0.0f), (TerrainFeature) new Grass((int) ((Grass) keyValuePair.Value).grassType, Game1.random.Next(1, 3)));
+              // Do the same checks for the bottom tile of existing grass (25% chance also), also grow random stage 1-3 if succeeded
               if (this.isTileOnMap(x, y) && !this.isTileOccupied(keyValuePair.Key + new Vector2(0.0f, 1f), "") && (this.isTileLocationOpenIgnoreFrontLayers(new Location(x * Game1.tileSize, (y + 1) * Game1.tileSize)) && this.doesTileHaveProperty(x, y + 1, "Diggable", "Back") != null) && Game1.random.NextDouble() < 0.25)
                 this.terrainFeatures.Add(keyValuePair.Key + new Vector2(0.0f, 1f), (TerrainFeature) new Grass((int) ((Grass) keyValuePair.Value).grassType, Game1.random.Next(1, 3)));
+              // Do the same checks for the north tile of existing grass (25% chance also), also grow random stage 1-3 if succeeded
               if (this.isTileOnMap(x, y) && !this.isTileOccupied(keyValuePair.Key + new Vector2(0.0f, -1f), "") && (this.isTileLocationOpenIgnoreFrontLayers(new Location(x * Game1.tileSize, (y - 1) * Game1.tileSize)) && this.doesTileHaveProperty(x, y - 1, "Diggable", "Back") != null) && Game1.random.NextDouble() < 0.25)
                 this.terrainFeatures.Add(keyValuePair.Key + new Vector2(0.0f, -1f), (TerrainFeature) new Grass((int) ((Grass) keyValuePair.Value).grassType, Game1.random.Next(1, 3)));
             }
@@ -8369,6 +8385,7 @@ label_19:
           source.Add(keyValuePair.Key);
       }
       if (!(this is Farm))
+        // If not on farm, spawn not weedonly, spawnFromOldWeed to true
         this.spawnWeedsAndStones(-1, false, true);
       for (int index = source.Count - 1; index >= 0; --index)
       {

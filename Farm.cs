@@ -232,7 +232,9 @@ namespace StardewValley
       }
       this.addCrows();
       if (!Game1.currentSeason.Equals("winter"))
+        // In summer, make 30 debris per day, otherwise 20 debris, not just weed, and spawnFromOldWeeds is true
         this.spawnWeedsAndStones(Game1.currentSeason.Equals("summer") ? 30 : 20, false, true);
+        // Spawn weeds not weeds only
       this.spawnWeeds(false);
       if (dayOfMonth == 1)
       {
@@ -251,10 +253,13 @@ namespace StardewValley
             }
           }
         }
+        // First day of the month, spawn extra 20 debris brand new
         this.spawnWeedsAndStones(20, false, false);
         if (Game1.currentSeason.Equals("spring") && Game1.stats.DaysPlayed > 1U)
         {
+          // For spring, makes another 40 debris
           this.spawnWeedsAndStones(40, false, false);
+          // For spring, makes another 40 weeds only
           this.spawnWeedsAndStones(40, true, false);
           for (int index = 0; index < 15; ++index)
           {
