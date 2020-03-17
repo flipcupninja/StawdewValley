@@ -6043,18 +6043,25 @@ label_369:
           {
             if (season == "winter")
               ;
+              // Return winter weed
             return 674;
           }
+          // On fall, 33% chance to return 786 type of weed
           if (r.NextDouble() < 0.33)
             return 786;
+          // If not 50:50 chance between weed type 679 and 678
           return r.NextDouble() >= 0.5 ? 679 : 678;
         }
+        // 30% chance on summer to use 785 variant
         if (r.NextDouble() < 0.33)
           return 785;
+        // 50:50 chance between 677 and 676
         return r.NextDouble() >= 0.5 ? 677 : 676;
       }
+      // 30% chance on spring to use 784 variant
       if (r.NextDouble() < 0.33)
         return 784;
+      // 50:50 chance on spring to use 675 or 674
       return r.NextDouble() >= 0.5 ? 675 : 674;
     }
 
