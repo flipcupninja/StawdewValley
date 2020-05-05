@@ -173,6 +173,7 @@ namespace StardewValley
     public const int rainDensity = 70;
     public const int millisecondsPerDialogueLetterType = 30;
     public const float pickToolDelay = 500f;
+    // Interesting fishing data
     public const int defaultMinFishingBiteTime = 600;
     public const int defaultMaxFishingBiteTime = 30000;
     public const int defaultMinFishingNibbleTime = 340;
@@ -6860,6 +6861,7 @@ label_81:
               break;
           }
         }
+        // Fishing sections
         else if (Game1.player.CurrentTool is FishingRod)
         {
           switch (Game1.player.FacingDirection)
@@ -6881,6 +6883,7 @@ label_81:
               Game1.player.CurrentTool.Update(3, 0);
               break;
           }
+          // Cannot release tools 
           Game1.player.canReleaseTool = false;
         }
         else if (Game1.player.CurrentTool is MeleeWeapon)

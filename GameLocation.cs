@@ -8438,7 +8438,8 @@ label_19:
       if (this is Farm && (this as Farm).isBuildingConstructed("Gold Clock") || (this is Beach || Game1.currentSeason.Equals("winter")) || this is Desert)
         return;
 
-      // If numDebris is not -1, set it, if it is -1
+      // If numDebris is not -1, set it to num, 
+      // if it is -1
         //, 95% change to:
         //  try 25% chance to get number between 10 - 25, if not 5 - 11 
         // or 0 (no new debris)
@@ -8521,7 +8522,8 @@ label_19:
             // If this is farm and not spawnFromOldWeeds and a 5% chance succeed
             if (this is Farm && !spawnFromOldWeeds && Game1.random.NextDouble() < 0.05)
             {
-              // Add terrainFeatures at vector 2_1 + vector 2_2, put a tree with random choice of which tree, and random choice of the growth stage
+              // Add terrainFeatures at vector 2_1 + vector 2_2, put a tree with random choice of which tree, 
+              // and random choice of the growth stage
               this.terrainFeatures.Add(vector2_1 + vector2_2, (TerrainFeature) new Tree(Game1.random.Next(3) + 1, Game1.random.Next(3)));
               // Go to next loop
               continue;
